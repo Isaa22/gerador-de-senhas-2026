@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Senhas · Segurança Digital</title>
+    <!-- CSS externo (style.css) -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Fonte personalizada e ícones (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-shield-alt"></i> Segurança Digital</h1>
+            <p>Matemática e lógica para senhas inquebráveis</p>
+        </header>
+
+        <main>
+            <!-- Card principal do gerador -->
+            <section class="card gerador">
+                <h2><i class="fas fa-key"></i> Gerador de Senhas</h2>
+
+                <!-- Área da senha gerada -->
+                <div class="senha-display">
+                    <span id="senhaGerada">Clique em "Gerar"</span>
+                    <button id="copiarBtn" title="Copiar senha"><i class="fas fa-copy"></i></button>
+                </div>
+
+                <!-- Controles de personalização -->
+                <div class="controles">
+                    <!-- Comprimento da senha -->
+                    <div class="grupo-controle">
+                        <label for="tamanho">Comprimento:</label>
+                        <input type="number" id="tamanho" min="4" max="64" value="16">
+                    </div>
+
+                    <!-- Fonte (estilo visual) -->
+                    <div class="grupo-controle">
+                        <label for="fonte">Fonte:</label>
+                        <select id="fonte">
+                            <option value="'Segoe UI', sans-serif">Segoe UI</option>
+                            <option value="'Courier New', monospace">Courier New</option>
+                            <option value="'Georgia', serif">Georgia</option>
+                            <option value="'Arial', sans-serif">Arial</option>
+                            <option value="'Times New Roman', serif">Times New Roman</option>
+                            <option value="'Verdana', sans-serif">Verdana</option>
+                        </select>
+                    </div>
+
+                    <!-- Tamanho da fonte (display) -->
+                    <div class="grupo-controle">
+                        <label for="tamanhoFonte">Tamanho fonte:</label>
+                        <input type="number" id="tamanhoFonte" min="12" max="48" value="24">
+                    </div>
+
+                    <!-- Opções de caracteres (checkboxes) -->
+                    <div class="opcoes-caracteres">
+                        <label><input type="checkbox" id="maiusculas" checked> A-Z (maiúsculas)</label>
+                        <label><input type="checkbox" id="minusculas" checked> a-z (minúsculas)</label>
+                        <label><input type="checkbox" id="numeros" checked> 0-9 (números)</label>
+                        <label><input type="checkbox" id="especiais"> !@#$%^&* (especiais)</label>
+                        <label><input type="checkbox" id="objetos"> Objetos (🌻🚀⚡)</label>
+                        <label><input type="checkbox" id="nomes"> Nomes (Ana, João, etc.)</label>
+                    </div>
+                </div>
+
+                <!-- Botão gerar + ações -->
+                <button id="gerarBtn"><i class="fas fa-sync-alt"></i> Gerar senha</button>
+                <div class="botoes-extra">
+                    <button id="limparBtn"><i class="fas fa-undo-alt"></i> Limpar</button>
+                    <button id="aleatorioBtn"><i class="fas fa-dice"></i> Aleatório</button>
+                </div>
+            </section>
+
+            <!-- Seção de dicas / matemática -->
+            <section class="card dicas">
+                <h3><i class="fas fa-calculator"></i> Matemática da Segurança</h3>
+                <p>Senhas fortes usam <strong>combinações</strong> de caracteres. Quanto mais variedade, maior o espaço de busca.</p>
+                <div class="formula">
+                    <span id="combinacoes">Combinações: -</span>
+                    <span id="entropia">Entropia: - bits</span>
+                </div>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Use maiúsculas, minúsculas, números e símbolos.</li>
+                    <li><i class="fas fa-check-circle"></i> Evite palavras comuns ou datas.</li>
+                    <li><i class="fas fa-check-circle"></i> Quanto maior, mais seguro.</li>
+                </ul>
+            </section>
+        </main>
+
+        <footer>
+            <p>Protegido por matemática · 2026</p>
+        </footer>
+    </div>
+    <!-- JavaScript externo (script.js) -->
+    <script src="script.js"></script>
+</body>
+</html>
