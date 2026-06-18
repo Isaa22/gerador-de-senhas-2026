@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-    background: #f5f0eb;  /* fundo neutro suave */
+    background: #610c0c;  /* fundo neutro suave */
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -19,7 +19,7 @@ body {
 .container {
     max-width: 820px;
     width: 100%;
-    background: #fffdfc;
+    background: #8a0330;
     border-radius: 36px;
     box-shadow: 0 20px 40px rgba(80, 20, 20, 0.15);
     padding: 28px 30px 20px;
