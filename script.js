@@ -56,77 +56,54 @@ function gerarSenha() {
     if (usarNumeros) { pool += DIGITOS; descricao += 'Números '; }
     if (usarEspeciais) { pool += ESPECIAIS; descricao += 'Especiais '; }
     if (usarObjetos) { pool += OBJETOS.join(''); descricao += 'Objetos '; }
-    if (usarNomes) { pool += NOMES.join(''); descricao += 'Nomes '; } // Nomes como string
+    if (usarNomes) { pool += NOMES.join(''); descricao += 'Nomes '; }
 
     // Se nenhuma opção marcada, usar padrão (maiúsculas+minúsculas+números)
     if (pool.length === 0) {
         pool = LETRAS_MAIUSCULAS + LETRAS_MINUSCULAS + DIGITOS;
         descricao = 'Maiúsculas+Minúsculas+Números';
-        // marcar checkboxes para refletir
         maiusculasCb.checked = true;
         minusculasCb.checked = true;
         numerosCb.checked = true;
     }
 
-    // 3. Gerar senha baseada no pool
-    let senha = '';
-    const poolArray = pool.split(''); // para caracteres individuais
-
-    // Se NOMES estiver ativo, garantimos que pelo menos um nome seja inserido? 
-    // Mistura aleatória: para cada posição, escolhe do pool.
-    // Para garantir diversidade com nomes/objetos (que são strings maiores), faremos uma abordagem mista:
-    // Se usarNomes, podemos inserir um nome aleatório em uma posição aleatória.
-    // Mas para manter simplicidade e mistura, pegamos caracteres do pool (que já inclui nomes como strings)
-    // Porém nomes são strings, então se pool contém 'Ana', o split vai gerar 'A','n','a' ... 
-    // Isso não é ideal, então vamos tratar nomes e objetos de forma especial:
-    // Abordagem: gerar caracteres normais + aleatoriamente inserir um nome ou objeto.
-
-    // Estratégia: montar uma lista de "unidades" (caracteres ou palavras)
+    // 3. Montar lista de "unidades" (caracteres ou palavras)
     let unidades = [];
-    // Adiciona caracteres individuais do pool (excluindo nomes/objetos como strings)
     let poolBase = '';
     if (usarMaiusculas) poolBase += LETRAS_MAIUSCULAS;
     if (usarMinusculas) poolBase += LETRAS_MINUSCULAS;
     if (usarNumeros) poolBase += DIGITOS;
     if (usarEspeciais) poolBase += ESPECIAIS;
 
-    // Se houver base, adiciona cada caractere como unidade
     if (poolBase.length > 0) {
         for (let ch of poolBase) {
             unidades.push(ch);
         }
     }
 
-    // Adiciona objetos como unidades (cada emoji é uma unidade)
     if (usarObjetos) {
         for (let obj of OBJETOS) {
             unidades.push(obj);
         }
     }
 
-    // Adiciona nomes como unidades
     if (usarNomes) {
         for (let nome of NOMES) {
             unidades.push(nome);
         }
     }
 
-    // Se unidades estiver vazio (caso raro), preencher com base
     if (unidades.length === 0) {
         unidades = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.split('');
     }
 
-    // Gerar senha: escolher aleatoriamente N unidades, e concatenar
+    // Gerar senha
     let resultado = '';
     for (let i = 0; i < tamanho; i++) {
         const idx = Math.floor(Math.random() * unidades.length);
         resultado += unidades[idx];
     }
 
-    // Se o resultado ficar menor que o tamanho (por causa de unidades que são strings),
-    // podemos ajustar, mas como pegamos unidades aleatórias, pode ficar maior.
-    // Vamos garantir que o tamanho seja exato: se resultado.length > tamanho, cortamos.
-    // Se resultado.length < tamanho, complementamos com caracteres do poolBase.
     while (resultado.length < tamanho) {
         const fallback = poolBase.length > 0 ? poolBase : 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         resultado += fallback[Math.floor(Math.random() * fallback.length)];
@@ -144,7 +121,7 @@ function gerarSenha() {
     senhaSpan.style.fontSize = tamanhoFonte;
     senhaSpan.textContent = senha;
 
-    // Atualizar estatísticas (matemática)
+    // Atualizar estatísticas
     atualizarEstatisticas(unidades, tamanho);
 
     return senha;
@@ -152,7 +129,6 @@ function gerarSenha() {
 
 // Estatísticas: combinações e entropia
 function atualizarEstatisticas(unidades, comprimento) {
-    // Número de unidades distintas no pool
     const conjuntoUnico = new Set(unidades);
     const qtd = conjuntoUnico.size;
     if (qtd === 0) {
@@ -160,11 +136,8 @@ function atualizarEstatisticas(unidades, comprimento) {
         entropiaSpan.textContent = 'Entropia: - bits';
         return;
     }
-    // Combinações possíveis = qtd ^ comprimento (aprox)
     const combinacoes = Math.pow(qtd, comprimento);
-    // Entropia = log2(qtd^comprimento) = comprimento * log2(qtd)
     const entropia = comprimento * Math.log2(qtd);
-    // Formatação
     let combStr;
     if (combinacoes > 1e12) {
         combStr = combinacoes.toExponential(3);
@@ -182,7 +155,6 @@ function copiarSenha() {
         navigator.clipboard.writeText(senha).then(() => {
             alert('Senha copiada!');
         }).catch(() => {
-            // fallback
             const range = document.createRange();
             range.selectNode(senhaSpan);
             window.getSelection().removeAllRanges();
@@ -200,40 +172,33 @@ function limparSenha() {
     senhaSpan.textContent = 'Clique em "Gerar"';
     combinacoesSpan.textContent = 'Combinações: -';
     entropiaSpan.textContent = 'Entropia: - bits';
-    // Reset estilo
     senhaSpan.style.fontFamily = "'Segoe UI', sans-serif";
     senhaSpan.style.fontSize = '24px';
     fonteSelect.value = "'Segoe UI', sans-serif";
     tamanhoFonteInput.value = '24';
 }
 
-// Função aleatório: gera senha com opções aleatórias
+// Função aleatório
 function gerarAleatorio() {
-    // Aleatorizar checkboxes
     const checks = [maiusculasCb, minusculasCb, numerosCb, especiaisCb, objetosCb, nomesCb];
-    // Pelo menos 2 marcados
     let ativos = 0;
     do {
         for (let cb of checks) {
             cb.checked = Math.random() > 0.5;
             if (cb.checked) ativos++;
         }
-    } while (ativos < 2 || ativos > 5); // garantir variedade
+    } while (ativos < 2 || ativos > 5);
 
-    // Tamanho aleatório entre 8 e 28
     const tamanhoAleatorio = Math.floor(Math.random() * 20) + 10;
     tamanhoInput.value = tamanhoAleatorio;
 
-    // Fonte aleatória
     const fontes = ["'Segoe UI', sans-serif", "'Courier New', monospace", "'Georgia', serif", "'Arial', sans-serif", "'Times New Roman', serif", "'Verdana', sans-serif"];
     const fonteRand = fontes[Math.floor(Math.random() * fontes.length)];
     fonteSelect.value = fonteRand;
 
-    // Tamanho fonte aleatório entre 16 e 36
     const tamanhoFonteRand = Math.floor(Math.random() * 20) + 16;
     tamanhoFonteInput.value = tamanhoFonteRand;
 
-    // Gerar
     gerarSenha();
 }
 
@@ -243,9 +208,8 @@ copiarBtn.addEventListener('click', copiarSenha);
 limparBtn.addEventListener('click', limparSenha);
 aleatorioBtn.addEventListener('click', gerarAleatorio);
 
-// Inicialização com uma senha padrão
+// Inicialização
 window.addEventListener('load', () => {
-    // Marcar opções padrão
     maiusculasCb.checked = true;
     minusculasCb.checked = true;
     numerosCb.checked = true;
